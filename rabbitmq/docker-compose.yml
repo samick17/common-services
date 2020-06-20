@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: rabbitmq
+    volumes:
+      - ./data/rabbitmq/data:/var/lib/rabbitmq/
+      - ./data/rabbitmq/logs:/var/log/rbbitmq/
+    environment:
+      RABBIT_MQ_ERLAANG_COOKIE: 64d1b43eaa64630ffcda98ac
+      RABBIT_MQ_DEFAULT_USER: samick
+      RABBIT_MQ_DEFAULT_PASS: 40bc03abe4f8261c9bd7d012
+    ports:
+      - 45672:5672
+      - 55672:15672
