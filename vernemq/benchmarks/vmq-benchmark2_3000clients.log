@@ -1,0 +1,9 @@
+Total Ratio:                 0.966 (28985/30000)
+Total Runtime (sec):         8.318
+Average Runtime (sec):       3.679
+Msg time min (ms):           106.178
+Msg time max (ms):           999.806
+Msg time mean mean (ms):     306.451
+Msg time mean std (ms):      75.268
+Average Bandwidth (msg/sec): 2.825
+Total Bandwidth (msg/sec):   8476.390

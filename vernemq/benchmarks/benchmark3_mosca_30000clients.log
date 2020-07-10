@@ -1,0 +1,11 @@
+mqtt-benchmark --broker "wss://w-mqtt.stage.myviewboard.cloud/stage" -username vsssi -password ssi1234 -clients 30000 -count 10 -size 11024 -qos 1 -delay 1  -msgtimeout 1000
+
+Total Ratio:                 0.037 (11099/300000)
+Total Runtime (sec):         52.125
+Average Runtime (sec):       0.913
+Msg time min (ms):           214.556
+Msg time max (ms):           999.630
+Msg time mean mean (ms):     55.252
+Msg time mean std (ms):      182.076
+Average Bandwidth (msg/sec): 0.043
+Total Bandwidth (msg/sec):   1297.162

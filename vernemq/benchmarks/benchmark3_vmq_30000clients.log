@@ -1,0 +1,11 @@
+mqtt-benchmark --broker mvb-vmq-lb-1646000923.ap-south-1.elb.amazonaws.com:1883 -username vsssi -password ssi1234 -clients 30000 -count 10 -size 11024 -qos 1 -delay 1  -msgtimeout 1000
+
+Total Ratio:                 0.639 (191810/300000)
+Total Runtime (sec):         46.203
+Average Runtime (sec):       4.372
+Msg time min (ms):           105.562
+Msg time max (ms):           5482.930
+Msg time mean mean (ms):     233.085
+Msg time mean std (ms):      182.318
+Average Bandwidth (msg/sec): 1.120
+Total Bandwidth (msg/sec):   33598.241
