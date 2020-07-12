@@ -4,7 +4,11 @@ services:
   redis:
     image: redis:buster
     container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - REDIS_PASSWORD=redis123
     volumes:
       - ./data:/data
     ports:
       - 6379:6379
+    command: redis-server --requirepass redis123
