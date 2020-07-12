@@ -1,7 +1,12 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-username=samick
-password=$(echo abcd1234 | bcrypt --cost=12)
-redis-cli SET "[\"\",\"$username\",\"\"]" "{\"passhash\":\"$password\",\"subscribe_acl\":[{\"pattern\":\"a/+/c\"}]}"
-redis-cli SET "[\"\",\"\",\"$username\"]" "{\"passhash\":\"$password\",\"subscribe_acl\":[{\"pattern\":\"a/+/c\"}]}"
-redis-cli SET "[\"\",\"$username\",\"$username\"]" "{\"passhash\":\"$password\",\"subscribe_acl\":[{\"pattern\":\"a/+/c\"}]}"
+# [mountpoint, client_id, username]
+# samick:abcd1234
+# Usage: sh ./adduser.sh username clientId password
+username=$1
+clientId=$2
+
+password=$(htpasswd -bnBC 12 "" $3 | tr -d ':\n')
+password="\$2a""$(echo $password | cut -c 4-)"
+
+redis-cli -a redis123 SET "[\"$mountpoint\",\"$clientId\",\"$username\"]" "{\"passhash\":\"$password\",\"subscribe_acl\":[{\"pattern\":\"#\"}],\"publish_acl\":[{\"pattern\":\"#\"}]}"

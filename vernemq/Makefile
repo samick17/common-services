@@ -20,17 +20,27 @@ showplugin:
 
 all:
 	make run
-	make reconf
+	make updatelua
+# 	make reconf
 
 genpw:
 	echo -n $(pw) | bcrypt --cost=12
 
 adduser:
-	sh adduser.sh
+	sh adduser.sh samick samick abcd1234
+	sh adduser.sh testuser testuser abcd1234
+
+updatelua:
+# 	docker exec -it vernemq1 rm -rf ~/share/lua/auth/redis.lua
+# 	docker exec -it vernemq1 mkdir -p ~/share/lua/auth
+	docker cp redis.lua vernemq1:/vernemq/share/lua/auth/redis.lua
+# 	docker exec -it vernemq1 vmq-admin script reload path=/vernemq/share/lua/auth/redis.lua
 
 sub:
-	mosquitto_sub --host localhost --port 1883 --topic /asd --username samick --pw abcd1234
+	mosquitto_sub --host localhost --port 1883 --topic test/abcde --username samick --pw abcd1234 --id samick
 
 pub:
-	mosquitto_pub --host localhost --port 1883 --topic /asd --username samick --pw abcd1234 --message "asd"
+	mosquitto_pub --host localhost --port 1883 --topic test/abcde --username testuser --pw abcd1234 --id testuser --message "asd"
 
+log:
+	docker logs vernemq1
