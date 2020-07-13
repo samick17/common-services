@@ -1,12 +1,10 @@
-FROM debian:stretch-slim
+FROM alpine:3.12
 
-RUN apt-get update && \
-    apt-get -y install bash procps openssl iproute2 curl jq libsnappy-dev && \
-    rm -rf /var/lib/apt/lists/* && \
+RUN apk --no-cache --update --available upgrade && \
+    apk add --no-cache ncurses-libs openssl libstdc++ jq curl bash snappy-dev && \
     addgroup --gid 10000 vernemq && \
-    adduser --uid 10000 --system --ingroup vernemq --home /vernemq --disabled-password vernemq
-
-WORKDIR /vernemq
+    adduser --uid 10000 -H -D -G vernemq -h /vernemq vernemq && \
+    install -d -o vernemq -g vernemq /vernemq
 
 # Defaults
 ENV DOCKER_VERNEMQ_KUBERNETES_LABEL_SELECTOR="app=vernemq" \
@@ -14,12 +12,14 @@ ENV DOCKER_VERNEMQ_KUBERNETES_LABEL_SELECTOR="app=vernemq" \
     PATH="/vernemq/bin:$PATH" \
     VERNEMQ_VERSION="1.10.3"
 
+WORKDIR /vernemq
+
 COPY --chown=10000:10000 bin/vernemq.sh /usr/sbin/start_vernemq
 COPY --chown=10000:10000 files/vm.args /vernemq/etc/vm.args
-ADD https://github.com/vernemq/vernemq/releases/download/$VERNEMQ_VERSION/vernemq-$VERNEMQ_VERSION.stretch.tar.gz /tmp
+ADD https://github.com/vernemq/vernemq/releases/download/$VERNEMQ_VERSION/vernemq-$VERNEMQ_VERSION.alpine.tar.gz /tmp
 
-RUN tar -xzvf /tmp/vernemq-$VERNEMQ_VERSION.stretch.tar.gz && \
-    rm /tmp/vernemq-$VERNEMQ_VERSION.stretch.tar.gz && \
+RUN tar -xzvf /tmp/vernemq-$VERNEMQ_VERSION.alpine.tar.gz && \
+    rm /tmp/vernemq-$VERNEMQ_VERSION.alpine.tar.gz && \
     chown -R 10000:10000 /vernemq && \
     ln -s /vernemq/etc /etc/vernemq && \
     ln -s /vernemq/data /var/lib/vernemq && \
@@ -43,5 +43,4 @@ VOLUME ["/vernemq/log", "/vernemq/data", "/vernemq/etc"]
 HEALTHCHECK CMD vernemq ping | grep -q pong
 
 USER vernemq
-
 CMD ["start_vernemq"]

@@ -55,3 +55,6 @@ reg_hooks:
 
 show_hooks:
 	docker exec -it vernemq1 vmq-admin webhooks show
+
+launch_cluster_auto:
+	echo TODO
