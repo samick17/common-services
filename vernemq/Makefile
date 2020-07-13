@@ -34,11 +34,7 @@ adduser:
 	sh adduser.sh testuser abcd1234
 
 updatelua:
-# 	docker exec -it vernemq1 rm -rf ~/share/lua/auth/redis.lua
-# 	docker exec -it vernemq1 mkdir -p ~/share/lua/auth
-# 	docker cp redis.lua vernemq1:/vernemq/share/lua/auth/auth_commons.lua
-	docker cp redis.lua vernemq1:/vernemq/share/lua/auth/redis.lua
-# 	docker exec -it vernemq1 vmq-admin script reload path=./share/lua/auth/auth_commons.lua
+	docker cp ./auth/redis.lua vernemq1:/vernemq/share/lua/auth/redis.lua
 	docker exec -it vernemq1 vmq-admin script reload path=./share/lua/auth/redis.lua
 
 sub:
