@@ -32,31 +32,20 @@ require "auth/auth_commons"
 -- IN THE FOLLOWING SCRIPT.
 function auth_on_register(reg)
     if reg.username ~= nil and reg.password ~= nil then
-        key = json.encode({reg.mountpoint, reg.client_id, reg.username})
-        res = redis.cmd(pool, "get " .. key)
-        log.info("[key]")
-        log.info(key)
-        log.info("[res]")
-        log.info(res)
-        if res then
-            res = json.decode(res)
-            -- log.info(res)
-            log.info("[password]")
-            log.info(reg.password)
-            log.info("[passhash]")
-            log.info(res.passhash)
-            log.info("[bcrypt] - hashpw")
-            log.info(bcrypt.hashpw(reg.password, res.passhash))
-            if res.passhash == bcrypt.hashpw(reg.password, res.passhash) then
-                cache_insert(
-                    reg.mountpoint, 
-                    reg.client_id, 
-                    reg.username,
-                    res.publish_acl,
-                    res.subscribe_acl
-                    )
-                return true
-            end
+        namespace = os.getenv("REDIS_NAMESPACE")
+        key = string.format("%s:mqtt:login:%s:%s", namespace, reg.username, reg.password)
+        res = redis.cmd(pool, "exists " .. key)
+        subscribe_acl = {{pattern="#"}}
+        publish_acl = {{pattern="#"}}
+        if res == 1 or res == "1" then
+            cache_insert(
+                reg.mountpoint, 
+                reg.client_id, 
+                reg.username,
+                publish_acl,
+                subscribe_acl
+                )
+            return true
         end
     end
     return false

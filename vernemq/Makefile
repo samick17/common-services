@@ -11,6 +11,9 @@ reconf:
 showconf:
 	docker exec -it vernemq1 cat /etc/vernemq/vernemq.conf | grep vmq_diversity
 
+showwebhooks:
+	docker exec -it vernemq1 cat /etc/vernemq/vernemq.conf | grep vmq_webhooks
+
 clean:
 	docker stop vernemq1
 	docker rm vernemq1
@@ -20,27 +23,35 @@ showplugin:
 
 all:
 	make run
-	make updatelua
+# 	make updatelua
 # 	make reconf
 
 genpw:
 	echo -n $(pw) | bcrypt --cost=12
 
 adduser:
-	sh adduser.sh samick samick abcd1234
-	sh adduser.sh testuser testuser abcd1234
+	sh adduser.sh samick abcd1234
+	sh adduser.sh testuser abcd1234
 
 updatelua:
 # 	docker exec -it vernemq1 rm -rf ~/share/lua/auth/redis.lua
 # 	docker exec -it vernemq1 mkdir -p ~/share/lua/auth
+# 	docker cp redis.lua vernemq1:/vernemq/share/lua/auth/auth_commons.lua
 	docker cp redis.lua vernemq1:/vernemq/share/lua/auth/redis.lua
-# 	docker exec -it vernemq1 vmq-admin script reload path=/vernemq/share/lua/auth/redis.lua
+# 	docker exec -it vernemq1 vmq-admin script reload path=./share/lua/auth/auth_commons.lua
+	docker exec -it vernemq1 vmq-admin script reload path=./share/lua/auth/redis.lua
 
 sub:
-	mosquitto_sub --host localhost --port 1883 --topic test/abcde --username samick --pw abcd1234 --id samick
+	mosquitto_sub --host localhost --port 1883 --topic test/abcde --username samick --pw abcd1234
 
 pub:
-	mosquitto_pub --host localhost --port 1883 --topic test/abcde --username testuser --pw abcd1234 --id testuser --message "asd"
+	mosquitto_pub --host localhost --port 1883 --topic test/abcde --username testuser --pw abcd1234 --message "asd"
 
 log:
 	docker logs vernemq1
+
+reg_hooks:
+	docker exec -it vernemq1 vmq-admin webhooks register hook=auth_on_publish endpoint="http://localhost/pub"
+
+show_hooks:
+	docker exec -it vernemq1 vmq-admin webhooks show

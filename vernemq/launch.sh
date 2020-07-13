@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# REDIS_HOST
+# REDIS_NAMESPACE
+# WHITEBOARD_API
+
 # Launch with redis auth
 docker run \
 	-e "DOCKER_VERNEMQ_ACCEPT_EULA=yes" \
@@ -11,9 +15,21 @@ docker run \
 	-e "DOCKER_VERNEMQ_VMQ_DIVERSITY__REDIS__HOST=redis" \
 	-e "DOCKER_VERNEMQ_VMQ_DIVERSITY__REDIS__PORT=6379" \
 	-e "DOCKER_VERNEMQ_VMQ_DIVERSITY__REDIS__PASSWORD=redis123" \
-	--add-host="redis:10.0.2.15" \
+	-e "DOCKER_VERNEMQ_ERLANG__DISTRIBUTION__PORT_RANGE__MINIMUM=9100" \
+	-e "DOCKER_VERNEMQ_ERLANG__DISTRIBUTION__PORT_RANGE__MAXIMUM=9109" \
+	-e "DOCKER_VERNEMQ_PLUGINS__VMQ_WEBHOOKS=on" \
+	-e "DOCKER_VERNEMQ_VMQ_WEBHOOKS__HOOK1__HOOK=auth_on_register" \
+	-e "DOCKER_VERNEMQ_VMQ_WEBHOOKS__HOOK1__ENDPOINT=http://localhost/onreg" \
+	-e "DOCKER_VERNEMQ_VMQ_WEBHOOKS__HOOK2__HOOK=auth_on_publish" \
+	-e "DOCKER_VERNEMQ_VMQ_WEBHOOKS__HOOK2__ENDPOINT=http://localhost/onpub" \
+	-e "REDIS_HOST=redis" \
+	-e "REDIS_NAMESPACE=whiteboard-testing" \
+	-e "WHITEBOARD_API=https://devapi.myviewboard.com" \
+	--add-host="redis:172.21.4.71" \
 	--name vernemq1 \
 	-p 1883:1883 \
 	-p 8080:8080 \
 	-p 8888:8888 \
+	-p 44053:44053 \
+	-p 9100-9109:9100-9109 \
 	-d vernemq/vernemq

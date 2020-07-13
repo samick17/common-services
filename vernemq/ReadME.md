@@ -53,3 +53,11 @@ mqtt-benchmark --broker mvb-vmq-lb-1646000923.ap-south-1.elb.amazonaws.com:1883 
 mqtt-benchmark --broker "wss://w-mqtt.stage.myviewboard.cloud/stage" -username vsssi -password ssi1234 -clients 3000 -count 10 -size 11024 -qos 1 -delay 1  -msgtimeout 1000
 
 ```
+
+## Install Tools
+
+```sh
+sudo apt-get update
+sudo apt-get install redis-tools -y
+sudo apt-get install apache2-utils -y
+```

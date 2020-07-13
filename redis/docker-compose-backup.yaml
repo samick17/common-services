@@ -7,7 +7,6 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - REDIS_PASSWORD=redis123
-      - REDIS_NAMESPACE=whiteboard-testing
     volumes:
       - ./data:/data
     ports:
