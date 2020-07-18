@@ -4,10 +4,8 @@ services:
   redis:
     image: redis:buster
     container_name: redis
-    environment:
-      - ALLOW_EMPTY_PASSWORD=no
-      - REDIS_PASSWORD=redis123
-      - REDIS_NAMESPACE=whiteboard-testing
+    env_file:
+      - .env
     volumes:
       - ./data:/data
     ports:

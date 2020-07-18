@@ -7,10 +7,8 @@ services:
     volumes:
       - ./data/rabbitmq/data:/var/lib/rabbitmq/
       - ./data/rabbitmq/logs:/var/log/rbbitmq/
-    environment:
-      RABBIT_MQ_ERLAANG_COOKIE: 64d1b43eaa64630ffcda98ac
-      RABBIT_MQ_DEFAULT_USER: samick
-      RABBIT_MQ_DEFAULT_PASS: 40bc03abe4f8261c9bd7d012
+    env_file:
+      - .env
     ports:
       - 45672:5672
       - 55672:15672
