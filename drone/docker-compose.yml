@@ -11,4 +11,3 @@ services:
       - ./data:/data
     ports:
       - 38080:80
-    command: redis-server --requirepass redis123
