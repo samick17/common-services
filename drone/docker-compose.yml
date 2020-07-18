@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  drone:
+    image: drone/drone:1
+    restart: always
+    container_name: drone
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    ports:
+      - 38080:80
+      - 38443:443
+    command: redis-server --requirepass redis123
