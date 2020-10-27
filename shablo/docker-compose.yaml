@@ -5,6 +5,6 @@ services:
     image: parlour:0.1.0
     restart: unless-stopped
     ports:
-      - 28888:8000
+      - 27777:8000
     env_file:
       - .env
