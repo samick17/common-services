@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   web:
-    image: parlour:0.1.0
+    image: samick17/parlour:0.1.1
     restart: unless-stopped
     ports:
       - 28888:8000
